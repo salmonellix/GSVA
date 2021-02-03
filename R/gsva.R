@@ -68,12 +68,7 @@ setMethod("gsva", signature(expr="SummarizedExperiment", gset.idx.list="GeneSetC
   }
 
   ## map to the actual features for which expression data is available
-  mapped.gset.idx.list <- lapply(mapped.gset.idx.list,
-                                 function(x, y) na.omit(fastmatch::fmatch(x, y)),
-                                 rownames(expr))
-
-  if (length(unlist(mapped.gset.idx.list, use.names=FALSE)) == 0)
-    stop("No identifiers in the gene sets could be matched to the identifiers in the expression data.")
+  mapped.gset.idx.list <- .mapGeneSetsToFeatures(mapped.gset.idx.list, rownames(expr))
 
   ## remove gene sets from the analysis for which no features are available
   ## and meet the minimum and maximum gene-set size specified by the user
@@ -144,12 +139,7 @@ setMethod("gsva", signature(expr="SummarizedExperiment", gset.idx.list="list"),
     stop("Less than two genes in the input ExpressionSet object\n")
 
   ## map to the actual features for which expression data is available
-  mapped.gset.idx.list <- lapply(gset.idx.list,
-                                 function(x, y) na.omit(fastmatch::fmatch(x, y)),
-                                 rownames(expr))
-
-  if (length(unlist(mapped.gset.idx.list, use.names=FALSE)) == 0)
-    stop("No identifiers in the gene sets could be matched to the identifiers in the expression data.")
+  mapped.gset.idx.list <- .mapGeneSetsToFeatures(gset.idx.list, rownames(expr))
 
   ## remove gene sets from the analysis for which no features are available
   ## and meet the minimum and maximum gene-set size specified by the user
@@ -206,12 +196,7 @@ setMethod("gsva", signature(expr="ExpressionSet", gset.idx.list="list"),
     stop("Less than two genes in the input ExpressionSet object\n")
 
   ## map to the actual features for which expression data is available
-  mapped.gset.idx.list <- lapply(gset.idx.list,
-                                 function(x, y) na.omit(fastmatch::fmatch(x, y)),
-                                 rownames(expr))
-
-  if (length(unlist(mapped.gset.idx.list, use.names=FALSE)) == 0)
-    stop("No identifiers in the gene sets could be matched to the identifiers in the expression data.")
+  mapped.gset.idx.list <- .mapGeneSetsToFeatures(gset.idx.list, rownames(expr))
 
   ## remove gene sets from the analysis for which no features are available
   ## and meet the minimum and maximum gene-set size specified by the user
@@ -288,14 +273,11 @@ setMethod("gsva", signature(expr="ExpressionSet", gset.idx.list="GeneSetCollecti
   }
 
   ## map to the actual features for which expression data is available
-  tmp <- lapply(mapped.gset.idx.list,
-                function(x, y) na.omit(fastmatch::fmatch(x, y)),
-                rownames(expr))
-  names(tmp) <- names(mapped.gset.idx.list)
+  mapped.gset.idx.list <- .mapGeneSetsToFeatures(mapped.gset.idx.list, rownames(expr))
 
   ## remove gene sets from the analysis for which no features are available
   ## and meet the minimum and maximum gene-set size specified by the user
-  mapped.gset.idx.list <- filterGeneSets(tmp,
+  mapped.gset.idx.list <- filterGeneSets(mapped.gset.idx.list,
                                          min.sz=max(1, min.sz),
                                          max.sz=max.sz)
 
@@ -354,17 +336,11 @@ setMethod("gsva", signature(expr="matrix", gset.idx.list="GeneSetCollection"),
   }
   
   ## map to the actual features for which expression data is available
-  tmp <- lapply(geneIds(mapped.gset.idx.list),
-                                 function(x, y) na.omit(fastmatch::fmatch(x, y)),
-                                 rownames(expr))
-  names(tmp) <- names(mapped.gset.idx.list)
-
-  if (length(unlist(tmp, use.names=FALSE)) == 0)
-    stop("No identifiers in the gene sets could be matched to the identifiers in the expression data.")
+  mapped.gset.idx.list <- .mapGeneSetsToFeatures(mapped.gset.idx.list, rownames(expr))
 
   ## remove gene sets from the analysis for which no features are available
   ## and meet the minimum and maximum gene-set size specified by the user
-  mapped.gset.idx.list <- filterGeneSets(tmp,
+  mapped.gset.idx.list <- filterGeneSets(mapped.gset.idx.list,
                                          min.sz=max(1, min.sz),
                                          max.sz=max.sz)
 
@@ -410,12 +386,8 @@ setMethod("gsva", signature(expr="matrix", gset.idx.list="list"),
   if (nrow(expr) < 2)
     stop("Less than two genes in the input expression data matrix\n")
 
-  mapped.gset.idx.list <- lapply(gset.idx.list,
-                                 function(x ,y) na.omit(fastmatch::fmatch(x, y)),
-                                 rownames(expr))
-
-  if (length(unlist(mapped.gset.idx.list, use.names=FALSE)) == 0)
-    stop("No identifiers in the gene sets could be matched to the identifiers in the expression data.")
+  ## map to the actual features for which expression data is available
+  mapped.gset.idx.list <- .mapGeneSetsToFeatures(gset.idx.list, rownames(expr))
 
   ## remove gene sets from the analysis for which no features are available
   ## and meet the minimum and maximum gene-set size specified by the user
@@ -699,7 +671,7 @@ ks_test_Rcode <- function(gene.density, gset_idxs, tau=1, make.plot=FALSE){
 .fastRndWalk <- function(gSetIdx, geneRanking, j, Ra) {
     n <- length(geneRanking)
     k <- length(gSetIdx)
-    idxs <- sort.int(fastmatch::fmatch(gSetIdx, geneRanking))
+    idxs <- sort.int(match(gSetIdx, geneRanking))
     
     stepCDFinGeneSet2 <- 
         sum(Ra[geneRanking[idxs], j] * (n - idxs + 1)) /
@@ -834,8 +806,8 @@ setMethod("computeGeneSetsOverlap", signature(gSets="list", uniqGenes="character
           function(gSets, uniqGenes, min.sz=1, max.sz=Inf) {
   totalGenes <- length(uniqGenes)
 
-  ## map to the features requested
-  gSets <- lapply(gSets, function(x, y) as.vector(na.omit(fastmatch::fmatch(x, y))), uniqGenes)
+  ## map to the actual features for which expression data is available
+  gSets <- .mapGeneSetsToFeatures(gSets, uniqGenes)
 
   lenGsets <- sapply(gSets, length)
   totalGsets <- length(gSets)
@@ -854,7 +826,7 @@ setMethod("computeGeneSetsOverlap", signature(gSets="list", uniqGenes="Expressio
   totalGenes <- length(uniqGenes)
 
   ## map to the actual features for which expression data is available
-  gSets <- lapply(gSets, function(x, y) as.vector(na.omit(fastmatch::fmatch(x, y))), uniqGenes)
+  gSets <- .mapGeneSetsToFeatures(gSets, uniqGenes)
 
   lenGsets <- sapply(gSets, length)
   totalGsets <- length(gSets)
