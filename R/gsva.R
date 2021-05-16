@@ -912,7 +912,7 @@ zscore <- function(X, geneSets, parallel.sz, verbose=TRUE,
   }
   
   es <- bplapply(as.list(1:n), function(j, Z, geneSets) {
-    es_sample <- lapply(geneSets, combinez_fisher, j, Z)
+    es_sample <- lapply(geneSets, combinez_stouffer, j, Z)
     unlist(es_sample)
   }, Z, geneSets, BPPARAM=BPPARAM)
   
