@@ -886,8 +886,7 @@ combinez <- function(gSetIdx, j, Z) sum(Z[gSetIdx, j]) / sqrt(length(gSetIdx))
 
 #length(gSetIdx) = k - number of gene sets
 
-combinez_fisher <- function(gSetIdx, j, Z) {q <- pnorm(gSetIdx);
-1 - pchisq(-2 * sum(log(2*pmin(q, 1-q))), 2*length(gSetIdx))}
+combinez_fisher <- function(gSetIdx, j, Z) {q <- pnorm(Z[gSetIdx, j]);1 - pchisq(-2 * sum(log(2*pmin(q, 1-q))), 2*length(gSetIdx))}
 
 combinez_stouffer <- function(gSetIdx, j, Z) {q <- pnorm(sum(Z[gSetIdx, j])/sqrt(length(gSetIdx))); 2*min(q, 1-q)}
 
@@ -912,7 +911,7 @@ zscore <- function(X, geneSets, parallel.sz, verbose=TRUE,
   }
   
   es <- bplapply(as.list(1:n), function(j, Z, geneSets) {
-    es_sample <- lapply(geneSets, combinez_stouffer, j, Z)
+    es_sample <- lapply(geneSets, combinez_fisher, j, Z)
     unlist(es_sample)
   }, Z, geneSets, BPPARAM=BPPARAM)
   
