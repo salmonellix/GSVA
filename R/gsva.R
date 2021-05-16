@@ -922,9 +922,9 @@ zscore <- function(X, geneSets, parallel.sz, verbose=TRUE,
 
 rightsingularsvdvectorgset <- function(gSetIdx, Z) {
   if(is(Z, "dgCMatrix")){
-    s <- BiocSingular::runExactSVD(Z[gSetIdx, ])
+    s <- BiocSingular::runPCA(Z[gSetIdx, ])
   } else {
-    s <- svd(Z[gSetIdx, ])
+    s <- BiocSingular::runPCA(Z[gSetIdx, ])
   }
   s$v[, 1]
 }
