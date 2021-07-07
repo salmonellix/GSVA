@@ -1,5 +1,5 @@
 .gsvaDelayedArray <- function(expr, gset.idx.list,
-                  method=c("gsva", "ssgsea", "zscore", "plage"),
+                  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca"),
                   kcdf=c("Gaussian", "Poisson", "none"),
                   rnaseq=FALSE,
                   abs.ranking=FALSE,
@@ -53,6 +53,26 @@
     return(zscoreDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
   }
   
+  if (method == "zscore_stouffer") {
+    if (rnaseq)
+      stop("rnaseq=TRUE does not work with method='zscore_stouffer'.")
+    
+    if(verbose)
+      cat("Estimating combined zscore_stouffer for", length(gset.idx.list), "gene sets.\n")
+    
+    return(zscore_stoufferDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
+  }
+  
+  if (method == "zscore_fisher") {
+    if (rnaseq)
+      stop("rnaseq=TRUE does not work with method='zscore_fisher'.")
+    
+    if(verbose)
+      cat("Estimating combined zscore_fisher for", length(gset.idx.list), "gene sets.\n")
+    
+    return(zscore_fisherDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
+  }
+  
   if (method == "plage") {
     if (rnaseq)
       stop("rnaseq=TRUE does not work with method='plage'.")
@@ -61,6 +81,16 @@
       cat("Estimating PLAGE scores for", length(gset.idx.list),"gene sets.\n")
     
     return(plageDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
+  }
+  
+  if (method == "plage_pca") {
+    if (rnaseq)
+      stop("rnaseq=TRUE does not work with method='plage_pca'.")
+    
+    if(verbose)
+      cat("Estimating plage_pca scores for", length(gset.idx.list),"gene sets.\n")
+    
+    return(plage_pcaDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
   }
   
 }
