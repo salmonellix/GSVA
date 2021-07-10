@@ -1032,9 +1032,9 @@ zscore_stouffer <- function(X, geneSets, parallel.sz, verbose=TRUE,
 
 pcavectorgset <- function(gSetIdx, Z) {
   if(is(Z, "dgCMatrix")){
-    s <- BiocSingular::runPCA(Z[gSetIdx, ])
+    s <- BiocSingular::runPCA(Z[gSetIdx, ], rank=10)
   } else {
-    s <- BiocSingular::runPCA(Z[gSetIdx, ])
+    s <- BiocSingular::runPCA(Z[gSetIdx, ], rank=10)
   }
   # first pca component
   s$rotation[ ,1]
@@ -1042,7 +1042,7 @@ pcavectorgset <- function(gSetIdx, Z) {
 
 rightsingularsvdvectorgset <- function(gSetIdx, Z) {
   if(is(Z, "dgCMatrix")){
-    s <- BiocSingular::runExactSVD(Z[gSetIdx, ])
+    s <- BiocSingular::runExactSVD(Z[gSetIdx, ], rank=10)
   } else {
     s <- svd(Z[gSetIdx, ])
   }
