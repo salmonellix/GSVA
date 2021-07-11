@@ -60,7 +60,7 @@
     if(verbose)
       cat("Estimating combined zscore_stouffer for", length(gset.idx.list), "gene sets.\n")
     
-    return(zscore_stoufferDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
+    return(zscoreDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
   }
   
   if (method == "zscore_fisher") {
@@ -70,7 +70,7 @@
     if(verbose)
       cat("Estimating combined zscore_fisher for", length(gset.idx.list), "gene sets.\n")
     
-    return(zscore_fisherDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
+    return(zscoreDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
   }
   
   if (method == "plage") {
@@ -90,7 +90,7 @@
     if(verbose)
       cat("Estimating plage_pca scores for", length(gset.idx.list),"gene sets.\n")
     
-    return(plage_pcaDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
+    return(plageDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
   }
   
 }

@@ -651,7 +651,7 @@ setMethod("gsva", signature(expr="matrix", gset.idx.list="list"),
   
   if (method == "plage_pca") {
     if (rnaseq)
-      stop("rnaseq=TRUE does not work with method='plage'.")
+      stop("rnaseq=TRUE does not work with method='plage_pca'.")
     
     if(verbose)
       cat("Estimating PLAGE PCA scores for", length(gset.idx.list),"gene sets.\n")
