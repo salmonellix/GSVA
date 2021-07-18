@@ -1041,7 +1041,7 @@ pcavectorgset <- function(gSetIdx, Z) {
                     ntop = 500,
                     subset_row = NULL,
                     scale=TRUE,
-                    transposed = FALSE)
+                    transposed = TRUE)
   # first pca component
   s[,1]
 }
