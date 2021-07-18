@@ -1030,14 +1030,20 @@ zscore_stouffer <- function(X, geneSets, parallel.sz, verbose=TRUE,
   es
 }
 
+pca_new2 = calculatePCA(data.matrix(a), ncomponents = 20,
+                        ntop = 500,
+                        subset_row = NULL,
+                        scale=TRUE,
+                        transposed = FALSE)
+
 pcavectorgset <- function(gSetIdx, Z) {
-  if(is(Z, "dgCMatrix")){
-    s <- BiocSingular::runPCA(Z[gSetIdx, ], rank=30)
-  } else {
-    s <- BiocSingular::runPCA(Z[gSetIdx, ], rank=30)
-  }
+  s <- calculatePCA(Z[gSetIdx, ], ncomponents = 20,
+                    ntop = 500,
+                    subset_row = NULL,
+                    scale=TRUE,
+                    transposed = FALSE)
   # first pca component
-  s$rotation[,1]
+  s[,1]
 }
 
 rightsingularsvdvectorgset <- function(gSetIdx, Z) {
