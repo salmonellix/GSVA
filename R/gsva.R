@@ -1041,7 +1041,7 @@ pcavectorgset <- function(gSetIdx, Z) {
                     ntop = 500,
                     subset_row = NULL,
                     scale=TRUE,
-                    transposed = TRUE)
+                    transposed = FALSE)
   # first pca component
   s[,1]
 }
@@ -1071,7 +1071,7 @@ plage <- function(X, geneSets, parallel.sz, verbose=TRUE,
     Z <- .dgCapply(Z, scale, 2)
     Z <- Matrix::t(Z)
     
-    es <- bplapply(geneSets, rightsingularsvdvectorgset, Z,
+    es <- bplapply(geneSets, pcavectorgset, Z,
                    BPPARAM=BPPARAM)
     
     es <- do.call(rbind, es)
@@ -1082,7 +1082,7 @@ plage <- function(X, geneSets, parallel.sz, verbose=TRUE,
     
     Z <- t(scale(t(X)))
     
-    es <- bplapply(geneSets, rightsingularsvdvectorgset, Z,
+    es <- bplapply(geneSets, pcavectorgset, Z,
                    BPPARAM=BPPARAM)
     
     es <- do.call(rbind, es)
