@@ -90,7 +90,7 @@
     if(verbose)
       cat("Estimating plage_pca scores for", length(gset.idx.list),"gene sets.\n")
     
-    return(plageDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
+    return(plagePcaDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
   }
   
 }
@@ -120,6 +120,17 @@ rightsvdDelayed <- function(gSetIdx, Z, bpp) {
   s$v[, 1]
 }
 
+pcaDelayed <- function(gSetIdx, Z, bpp) {
+  s <- calculatePCA(Z[gSetIdx, ], ncomponents = 20,
+                    ntop = 500,
+                    subset_row = NULL,
+                    scale=TRUE,
+                    transposed = FALSE,
+                    BPPARAM = bpp)
+  s[,1]
+}
+
+
 plageDelayed <- function(X, geneSets, parallel.sz, verbose=TRUE,
                   BPPARAM=SerialParam(progressbar=verbose)) {
 
@@ -136,6 +147,24 @@ plageDelayed <- function(X, geneSets, parallel.sz, verbose=TRUE,
   
   es
 }
+
+plagePcaDelayed <- function(X, geneSets, parallel.sz, verbose=TRUE,
+                         BPPARAM=SerialParam(progressbar=verbose)) {
+  
+  Z <- t(DelayedArray::scale(t(X)))
+  
+  es <- bplapply(geneSets, h5BackendRealization, pcaDelayed,
+                 Z, bpp=BPPARAM, BPPARAM=BPPARAM)
+  
+  es <- do.call(rbind, es)
+  rownames(es) <- names(geneSets)
+  colnames(es) <- colnames(X)
+  
+  es <- as(es, "HDF5Array")
+  
+  es
+}
+
 
 combinezDelayed <- function(gSetIdx, Z){
   DelayedMatrixStats::colSums2(Z[gSetIdx,]) / sqrt(length(gSetIdx))

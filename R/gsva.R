@@ -1071,7 +1071,7 @@ plage <- function(X, geneSets, parallel.sz, verbose=TRUE,
     Z <- .dgCapply(Z, scale, 2)
     Z <- Matrix::t(Z)
     
-    es <- bplapply(geneSets, pcavectorgset, Z,
+    es <- bplapply(geneSets, rightsingularsvdvectorgset, Z,
                    BPPARAM=BPPARAM)
     
     es <- do.call(rbind, es)
@@ -1082,7 +1082,7 @@ plage <- function(X, geneSets, parallel.sz, verbose=TRUE,
     
     Z <- t(scale(t(X)))
     
-    es <- bplapply(geneSets, pcavectorgset, Z,
+    es <- bplapply(geneSets, rightsingularsvdvectorgset, Z,
                    BPPARAM=BPPARAM)
     
     es <- do.call(rbind, es)
