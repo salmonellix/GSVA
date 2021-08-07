@@ -1073,7 +1073,7 @@ umapvectorgset <- function(gSetIdx, Z) {
   s <- calculateUMAP(Z[gSetIdx, ], ncomponents = 3,
                      ntop = 500,
                      subset_row = NULL,
-                     scale=TRUE,
+                     scale=FALSE,
                      transposed = FALSE,
                      pca=10)
   # first umap component
