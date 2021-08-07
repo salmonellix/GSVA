@@ -155,7 +155,8 @@ umapDelayed <- function(gSetIdx, Z) {
                      ntop = 500,
                      subset_row = NULL,
                      scale=TRUE,
-                     transposed = FALSE)
+                     transposed = FALSE,
+                     pca=10)
   # first umap component
   s[,1]
 }
