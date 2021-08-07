@@ -151,12 +151,11 @@ pcaDelayed <- function(gSetIdx, Z, bpp) {
 }
 
 umapDelayed <- function(gSetIdx, Z) {
-  s <- calculateUMAP(Z[gSetIdx, ], ncomponents = 3,
+  s <- calculateUMAP(Z[gSetIdx, ], ncomponents = 2,
                      ntop = 500,
                      subset_row = NULL,
-                     scale=FALSE,
-                     transposed = FALSE,
-                     pca=10)
+                     scale=TRUE,
+                     transposed = FALSE)
   # first umap component
   s[,1]
 }
