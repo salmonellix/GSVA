@@ -7,7 +7,7 @@ setGeneric("gsva", function(expr, gset.idx.list, ...) standardGeneric("gsva"))
 
 setMethod("gsva", signature(expr="HDF5Array", gset.idx.list="list"),
           function(expr, gset.idx.list, annotation,
-  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca"),
+  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca", "plage_tsne", "plage_umap"),
   kcdf=c("Gaussian", "Poisson", "none"),
   abs.ranking=FALSE,
   min.sz=1,
@@ -54,7 +54,7 @@ setMethod("gsva", signature(expr="HDF5Array", gset.idx.list="list"),
 
 setMethod("gsva", signature(expr="SingleCellExperiment", gset.idx.list="list"),
           function(expr, gset.idx.list, annotation,
-  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca"),
+  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca", "plage_tsne", "plage_umap"),
   kcdf=c("Gaussian", "Poisson", "none"),
   abs.ranking=FALSE,
   min.sz=1,
@@ -124,7 +124,7 @@ setMethod("gsva", signature(expr="SingleCellExperiment", gset.idx.list="list"),
           
 setMethod("gsva", signature(expr="dgCMatrix", gset.idx.list="list"),
           function(expr, gset.idx.list, annotation,
-  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca"),
+  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca", "plage_tsne", "plage_umap"),
   kcdf=c("Gaussian", "Poisson", "none"),
   abs.ranking=FALSE,
   min.sz=1,
@@ -171,7 +171,7 @@ setMethod("gsva", signature(expr="dgCMatrix", gset.idx.list="list"),
 
 setMethod("gsva", signature(expr="SummarizedExperiment", gset.idx.list="GeneSetCollection"),
           function(expr, gset.idx.list, annotation,
-  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca"),
+  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca", "plage_tsne", "plage_umap"),
   kcdf=c("Gaussian", "Poisson", "none"),
   abs.ranking=FALSE,
   min.sz=1,
@@ -261,7 +261,7 @@ setMethod("gsva", signature(expr="SummarizedExperiment", gset.idx.list="GeneSetC
 
 setMethod("gsva", signature(expr="SummarizedExperiment", gset.idx.list="list"),
           function(expr, gset.idx.list, annotation,
-  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca"),
+  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca", "plage_tsne", "plage_umap"),
   kcdf=c("Gaussian", "Poisson", "none"),
   abs.ranking=FALSE,
   min.sz=1,
@@ -329,7 +329,7 @@ setMethod("gsva", signature(expr="SummarizedExperiment", gset.idx.list="list"),
 
 setMethod("gsva", signature(expr="ExpressionSet", gset.idx.list="list"),
           function(expr, gset.idx.list, annotation,
-  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca"),
+  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca", "plage_tsne", "plage_umap"),
   kcdf=c("Gaussian", "Poisson", "none"),
   abs.ranking=FALSE,
   min.sz=1,
@@ -381,7 +381,7 @@ setMethod("gsva", signature(expr="ExpressionSet", gset.idx.list="list"),
 
 setMethod("gsva", signature(expr="ExpressionSet", gset.idx.list="GeneSetCollection"),
           function(expr, gset.idx.list, annotation,
-  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca"),
+  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca", "plage_tsne", "plage_umap"),
   kcdf=c("Gaussian", "Poisson", "none"),
   abs.ranking=FALSE,
   min.sz=1,
@@ -455,7 +455,7 @@ setMethod("gsva", signature(expr="ExpressionSet", gset.idx.list="GeneSetCollecti
 
 setMethod("gsva", signature(expr="matrix", gset.idx.list="GeneSetCollection"),
           function(expr, gset.idx.list, annotation,
-  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca"),
+  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca", "plage_tsne", "plage_umap"),
   kcdf=c("Gaussian", "Poisson", "none"),
   abs.ranking=FALSE,
   min.sz=1,
@@ -514,7 +514,7 @@ setMethod("gsva", signature(expr="matrix", gset.idx.list="GeneSetCollection"),
 
 setMethod("gsva", signature(expr="matrix", gset.idx.list="list"),
           function(expr, gset.idx.list, annotation,
-  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca"),
+  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca", "plage_tsne", "plage_umap"),
   kcdf=c("Gaussian", "Poisson", "none"),
   abs.ranking=FALSE,
   min.sz=1,
@@ -560,7 +560,7 @@ setMethod("gsva", signature(expr="matrix", gset.idx.list="list"),
 })
 
 .gsva <- function(expr, gset.idx.list,
-  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca"),
+  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca", "plage_tsne", "plage_umap"),
   kcdf=c("Gaussian", "Poisson", "none"),
   rnaseq=FALSE,
   abs.ranking=FALSE,
@@ -657,6 +657,24 @@ setMethod("gsva", signature(expr="matrix", gset.idx.list="list"),
       cat("Estimating PLAGE PCA scores for", length(gset.idx.list),"gene sets.\n")
     
     return(plage_pca(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
+  }
+  if (method == "plage_umap") {
+    if (rnaseq)
+      stop("rnaseq=TRUE does not work with method='plage_umap'.")
+    
+    if(verbose)
+      cat("Estimating PLAGE UMAP scores for", length(gset.idx.list),"gene sets.\n")
+    
+    return(plage_umap(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
+  }
+  if (method == "plage_tsne") {
+    if (rnaseq)
+      stop("rnaseq=TRUE does not work with method='plage_tsne'.")
+    
+    if(verbose)
+      cat("Estimating PLAGE T-SNE scores for", length(gset.idx.list),"gene sets.\n")
+    
+    return(plage_tsne(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
   }
 
 	if(verbose)
@@ -1030,14 +1048,9 @@ zscore_stouffer <- function(X, geneSets, parallel.sz, verbose=TRUE,
   es
 }
 
-pca_new2 = calculatePCA(data.matrix(a), ncomponents = 20,
-                        ntop = 500,
-                        subset_row = NULL,
-                        scale=TRUE,
-                        transposed = FALSE)
 
 pcavectorgset <- function(gSetIdx, Z) {
-  s <- calculatePCA(Z[gSetIdx, ], ncomponents = 20,
+  s <- calculatePCA(Z[gSetIdx, ], ncomponents = 3,
                     ntop = 500,
                     subset_row = NULL,
                     scale=TRUE,
@@ -1054,6 +1067,28 @@ rightsingularsvdvectorgset <- function(gSetIdx, Z) {
   }
   # first svd component
   s$v[, 1]
+}
+
+umapvectorgset <- function(gSetIdx, Z) {
+  s <- calculateUMAP(Z[gSetIdx, ], ncomponents = 3,
+                     ntop = 500,
+                     subset_row = NULL,
+                     scale=TRUE,
+                     transposed = FALSE)
+  # first umap component
+  s[,1]
+}
+
+tsnevectorgset <- function(gSetIdx, Z) {
+  s <- calculateTSNE(Z[gSetIdx, ], ncomponents = 3,
+                     ntop = 500,
+                     subset_row = NULL,
+                     scale=TRUE,
+                     transposed = FALSE,
+                     do.pca = FALSE,
+                     seed = 12345)
+  # first tsne component
+  s[,1]
 }
 
 
@@ -1122,6 +1157,84 @@ plage_pca <- function(X, geneSets, parallel.sz, verbose=TRUE,
     Z <- t(scale(t(X)))
     
     es <- bplapply(geneSets, pcavectorgset, Z,
+                   BPPARAM=BPPARAM)
+    
+    es <- do.call(rbind, es)
+    
+    if (length(geneSets) == 1)
+      es <- matrix(es, nrow=1)
+    
+    rownames(es) <- names(geneSets)
+    colnames(es) <- colnames(X)
+  }
+  
+  es
+}
+
+
+plage_umap <- function(X, geneSets, parallel.sz, verbose=TRUE,
+                      BPPARAM=SerialParam(progressbar=verbose)) {
+  if(is(X, "dgCMatrix")){
+    message("Please bear in mind that this method first scales the values of the gene
+    expression data. In order to take advantage of the sparse Matrix type, the scaling
+    will only be applied to the non-zero values of the data. This is a provisional 
+    solution in order to give support to the dgCMatrix format.")
+    
+    Z <- Matrix::t(X)
+    Z <- .dgCapply(Z, scale, 2)
+    Z <- Matrix::t(Z)
+    
+    es <- bplapply(geneSets, umapvectorgset, Z,
+                   BPPARAM=BPPARAM)
+    
+    es <- do.call(rbind, es)
+    
+    es <- as(es, "dgCMatrix")
+    
+  } else {
+    
+    Z <- t(scale(t(X)))
+    
+    es <- bplapply(geneSets, umapvectorgset, Z,
+                   BPPARAM=BPPARAM)
+    
+    es <- do.call(rbind, es)
+    
+    if (length(geneSets) == 1)
+      es <- matrix(es, nrow=1)
+    
+    rownames(es) <- names(geneSets)
+    colnames(es) <- colnames(X)
+  }
+  
+  es
+}
+
+
+plage_tsne <- function(X, geneSets, parallel.sz, verbose=TRUE,
+                      BPPARAM=SerialParam(progressbar=verbose)) {
+  if(is(X, "dgCMatrix")){
+    message("Please bear in mind that this method first scales the values of the gene
+    expression data. In order to take advantage of the sparse Matrix type, the scaling
+    will only be applied to the non-zero values of the data. This is a provisional 
+    solution in order to give support to the dgCMatrix format.")
+    
+    Z <- Matrix::t(X)
+    Z <- .dgCapply(Z, scale, 2)
+    Z <- Matrix::t(Z)
+    
+    es <- bplapply(geneSets, tsnevectorgset, Z,
+                   BPPARAM=BPPARAM)
+    
+    es <- do.call(rbind, es)
+    
+    es <- as(es, "dgCMatrix")
+    
+  } else {
+    
+    Z <- t(scale(t(X)))
+    
+    es <- bplapply(geneSets, tsnevectorgset, Z,
                    BPPARAM=BPPARAM)
     
     es <- do.call(rbind, es)

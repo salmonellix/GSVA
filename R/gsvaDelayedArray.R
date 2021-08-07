@@ -1,5 +1,5 @@
 .gsvaDelayedArray <- function(expr, gset.idx.list,
-                  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca"),
+                  method=c("gsva", "ssgsea", "zscore","zscore_stouffer","zscore_fisher", "plage", "plage_pca", "plage_tsne", "plage_umap"),
                   kcdf=c("Gaussian", "Poisson", "none"),
                   rnaseq=FALSE,
                   abs.ranking=FALSE,
@@ -93,6 +93,26 @@
     return(plagePcaDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
   }
   
+  if (method == "plage_umap") {
+    if (rnaseq)
+      stop("rnaseq=TRUE does not work with method='plage_umap'.")
+    
+    if(verbose)
+      cat("Estimating plage_umap scores for", length(gset.idx.list),"gene sets.\n")
+    
+    return(plageUmapDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
+  }
+  
+  if (method == "plage_tsne") {
+    if (rnaseq)
+      stop("rnaseq=TRUE does not work with method='plage_tsne'.")
+    
+    if(verbose)
+      cat("Estimating plage_tsne scores for", length(gset.idx.list),"gene sets.\n")
+    
+    return(plageTsneDelayed(expr, gset.idx.list, parallel.sz, verbose, BPPARAM=BPPARAM))
+  }
+  
 }
 
 h5BackendRealization <- function(gSetIdx, FUN, Z, bpp) {
@@ -121,7 +141,7 @@ rightsvdDelayed <- function(gSetIdx, Z, bpp) {
 }
 
 pcaDelayed <- function(gSetIdx, Z, bpp) {
-  s <- calculatePCA(Z[gSetIdx, ], ncomponents = 20,
+  s <- calculatePCA(Z[gSetIdx, ], ncomponents = 3,
                     ntop = 500,
                     subset_row = NULL,
                     scale=TRUE,
@@ -129,6 +149,31 @@ pcaDelayed <- function(gSetIdx, Z, bpp) {
                     BPPARAM = bpp)
   s[,1]
 }
+
+umapDelayed <- function(gSetIdx, Z, bpp) {
+  s <- calculateUMAP(Z[gSetIdx, ], ncomponents = 3,
+                     ntop = 500,
+                     subset_row = NULL,
+                     scale=TRUE,
+                     transposed = FALSE,
+                     BPPARAM = bpp)
+  # first umap component
+  s[,1]
+}
+
+tsneDelayed <- function(gSetIdx, Z, bpp) {
+  s <- calculateTSNE(Z[gSetIdx, ], ncomponents = 3,
+                     ntop = 500,
+                     subset_row = NULL,
+                     scale=TRUE,
+                     transposed = FALSE,
+                     do.pca = FALSE,
+                     BPPARAM = bpp,
+                     seed = 12345)
+  # first tsne component
+  s[,1]
+}
+
 
 
 plageDelayed <- function(X, geneSets, parallel.sz, verbose=TRUE,
@@ -154,6 +199,40 @@ plagePcaDelayed <- function(X, geneSets, parallel.sz, verbose=TRUE,
   Z <- t(DelayedArray::scale(t(X)))
   
   es <- bplapply(geneSets, h5BackendRealization, pcaDelayed,
+                 Z, bpp=BPPARAM, BPPARAM=BPPARAM)
+  
+  es <- do.call(rbind, es)
+  rownames(es) <- names(geneSets)
+  colnames(es) <- colnames(X)
+  
+  es <- as(es, "HDF5Array")
+  
+  es
+}
+
+plageUmapDelayed <- function(X, geneSets, parallel.sz, verbose=TRUE,
+                            BPPARAM=SerialParam(progressbar=verbose)) {
+  
+  Z <- t(DelayedArray::scale(t(X)))
+  
+  es <- bplapply(geneSets, h5BackendRealization, umapDelayed,
+                 Z, bpp=BPPARAM, BPPARAM=BPPARAM)
+  
+  es <- do.call(rbind, es)
+  rownames(es) <- names(geneSets)
+  colnames(es) <- colnames(X)
+  
+  es <- as(es, "HDF5Array")
+  
+  es
+}
+
+plageTsneDelayed <- function(X, geneSets, parallel.sz, verbose=TRUE,
+                            BPPARAM=SerialParam(progressbar=verbose)) {
+  
+  Z <- t(DelayedArray::scale(t(X)))
+  
+  es <- bplapply(geneSets, h5BackendRealization, tsneDelayed,
                  Z, bpp=BPPARAM, BPPARAM=BPPARAM)
   
   es <- do.call(rbind, es)
