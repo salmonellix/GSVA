@@ -1070,7 +1070,7 @@ rightsingularsvdvectorgset <- function(gSetIdx, Z) {
 }
 
 umapvectorgset <- function(gSetIdx, Z) {
-  s <- calculateUMAP(Z[gSetIdx, ],n_neighbors=3, ncomponents = 2,
+  s <- calculateUMAP(Z[gSetIdx, ],n_neighbors=2, ncomponents = 2,
                      ntop = 500,
                      subset_row = NULL,
                      scale=TRUE,
