@@ -1053,7 +1053,7 @@ pcavectorgset <- function(gSetIdx, Z) {
   s <- calculatePCA(Z[gSetIdx, ], ncomponents =2,
                     ntop = 500,
                     subset_row = NULL,
-                    scale=TRUE,
+                    scale=FALSE,
                     transposed = FALSE)
   # first pca component
   s[,1]
@@ -1142,7 +1142,7 @@ plage_pca <- function(X, geneSets, parallel.sz, verbose=TRUE,
     solution in order to give support to the dgCMatrix format.")
     
     Z <- Matrix::t(X)
-    Z <- .dgCapply(Z, scale, 2)
+#    Z <- .dgCapply(Z, scale, 2)
     Z <- Matrix::t(Z)
     
     es <- bplapply(geneSets, pcavectorgset, Z,
