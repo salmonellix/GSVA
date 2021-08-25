@@ -1050,7 +1050,7 @@ zscore_stouffer <- function(X, geneSets, parallel.sz, verbose=TRUE,
 
 
 pcavectorgset <- function(gSetIdx, Z) {
-  s <- calculatePCA(Z[gSetIdx, ], ncomponents = 3,
+  s <- calculatePCA(Z[gSetIdx, ], ncomponents =2,
                     ntop = 500,
                     subset_row = NULL,
                     scale=TRUE,
