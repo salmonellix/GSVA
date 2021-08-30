@@ -1073,7 +1073,7 @@ umapvectorgset <- function(gSetIdx, Z) {
   s <- calculateUMAP(Z[gSetIdx, ],n_neighbors=2, ncomponents = 2,
                      ntop = 500,
                      subset_row = NULL,
-                     scale=TRUE,
+                     scale=FALSE,
                      transposed = FALSE)
   # first umap component
   s[,1]
@@ -1083,7 +1083,7 @@ tsnevectorgset <- function(gSetIdx, Z) {
   s <- calculateTSNE(Z[gSetIdx, ], ncomponents = 3,
                      ntop = 500,
                      subset_row = NULL,
-                     scale=TRUE,
+                     scale=FALSE,
                      transposed = FALSE,
                      do.pca = FALSE,
                      seed = 12345)
