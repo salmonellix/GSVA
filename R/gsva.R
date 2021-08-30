@@ -1050,7 +1050,7 @@ zscore_stouffer <- function(X, geneSets, parallel.sz, verbose=TRUE,
 
 
 pcavectorgset <- function(gSetIdx, Z) {
-  s <- calculatePCA(Z[gSetIdx, ], ncomponents =2,
+  s <- calculatePCA(Z[gSetIdx, ], ncomponents =5,
                     ntop = 500,
                     subset_row = NULL,
                     scale=FALSE,
@@ -1070,7 +1070,7 @@ rightsingularsvdvectorgset <- function(gSetIdx, Z) {
 }
 
 umapvectorgset <- function(gSetIdx, Z) {
-  s <- calculateUMAP(Z[gSetIdx, ],n_neighbors=2, ncomponents = 2,
+  s <- calculateUMAP(Z[gSetIdx, ],n_neighbors=2, ncomponents = 5,
                      ntop = 500,
                      subset_row = NULL,
                      scale=FALSE,
@@ -1080,7 +1080,7 @@ umapvectorgset <- function(gSetIdx, Z) {
 }
 
 tsnevectorgset <- function(gSetIdx, Z) {
-  s <- calculateTSNE(Z[gSetIdx, ], ncomponents = 3,
+  s <- calculateTSNE(Z[gSetIdx, ], ncomponents = 5,
                      ntop = 500,
                      subset_row = NULL,
                      scale=FALSE,
